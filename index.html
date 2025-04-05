@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative AI & LLM Learning Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'LucideIcons';
+            src: url(https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.ttf) format('truetype');
+        }
+
+        .lucide {
+            font-family: 'LucideIcons';
+            font-size: 1.25rem; /* Adjust icon size as needed */
+            line-height: 1;
+            display: inline-block;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom styles for notes */
+        .notes-area {
+            display: none; /* Hidden by default */
+            transition: all 0.3s ease-in-out;
+        }
+        .notes-area.active {
+            display: block; /* Show when active */
+        }
+        /* Simple animation for section toggle */
+        .section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .section-content.open {
+            max-height: 10000px; /* Adjust as needed, large enough for content */
+            transition: max-height 0.5s ease-in;
+        }
+        /* Style completed items */
+        .completed label {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+         /* Style toggle icon */
+        .toggle-icon::before {
+            content: '\ea64'; /* Lucide chevron-down */
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .section-title.open .toggle-icon::before {
+            transform: rotate(180deg); /* Rotate icon when open */
+        }
+    </style>
+    <script>
+        // Configuration for Tailwind CSS (optional)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 to-blue-900 text-gray-100 font-sans p-4 md:p-8 min-h-screen">
+
+    <div class="max-w-4xl mx-auto bg-gray-800 rounded-xl shadow-2xl p-6 md:p-10">
+
+        <header class="text-center mb-8 md:mb-12 border-b border-gray-700 pb-6">
+            <h1 class="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-2">Generative AI & LLM Learning Roadmap</h1>
+            <p class="text-lg text-gray-400">Your interactive guide from beginner to professional.</p>
+            <p class="text-sm text-gray-500 mt-2">Progress and notes are saved in your browser's local storage.</p>
+        </header>
+
+        <main id="roadmap-container">
+            </main>
+
+        <footer class="text-center mt-10 pt-6 border-t border-gray-700">
+            <p class="text-gray-500 text-sm">&copy; 2025 AI Learning Journey. Keep learning and building!</p>
+             <p class="text-gray-600 text-xs mt-2">Disclaimer: The AI field evolves rapidly. Always seek the latest research and tools.</p>
+        </footer>
+    </div>
+
+    <template id="section-template">
+        <section class="mb-8 bg-gray-850 p-5 rounded-lg shadow-lg border border-gray-700/50">
+            <h2 class="section-title text-2xl md:text-3xl font-semibold mb-5 cursor-pointer flex justify-between items-center text-cyan-300 hover:text-cyan-200 transition-colors duration-200">
+                <span class="section-title-text"></span>
+                <span class="toggle-icon lucide text-xl"></span>
+            </h2>
+            <div class="section-content space-y-4">
+                </div>
+        </section>
+    </template>
+
+    <template id="topic-template">
+        <div class="topic-item border border-gray-700 p-4 rounded-md bg-gray-900/50 transition-all duration-300 hover:bg-gray-700/50">
+            <div class="flex items-start space-x-3">
+                <input type="checkbox" class="mt-1 h-5 w-5 text-cyan-500 bg-gray-700 border-gray-600 rounded focus:ring-cyan-600 focus:ring-offset-gray-800" data-topic-id="">
+                <div class="flex-1">
+                    <label class="font-medium text-lg text-gray-200 cursor-pointer"></label>
+                    <p class="text-sm text-gray-400 mt-1 description"></p>
+                    <div class="mt-3 resources">
+                        <h4 class="text-sm font-semibold text-gray-300 mb-1">Resources:</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-400 space-y-1"></ul>
+                    </div>
+                    <div class="mt-3 flex items-center space-x-2">
+                         <button class="toggle-notes-btn text-xs bg-gray-600 hover:bg-gray-500 text-gray-200 px-2 py-1 rounded transition-colors duration-200 flex items-center space-x-1">
+                            <span class="lucide text-sm">&#ef1e;</span> <span>Notes</span>
+                        </button>
+                         <span class="completion-status text-xs text-green-400 font-medium hidden">Completed!</span>
+                    </div>
+                    <div class="notes-area mt-3">
+                        <textarea class="w-full p-2 bg-gray-700 border border-gray-600 rounded text-gray-200 text-sm focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500" rows="3" placeholder="Add your notes here..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // --- Data for the Roadmap ---
+        const roadmapData = [
+            {
+                title: "Phase 1: Foundations (Beginner)",
+                topics: [
+                    { id: "math", name: "Math Prerequisites", description: "Essential mathematical concepts.", resources: ["Linear Algebra (Khan Academy, 3Blue1Brown)", "Calculus (Khan Academy)", "Probability & Statistics (Khan Academy, StatQuest)"] },
+                    { id: "python", name: "Python Programming", description: "Core Python and essential data science libraries.", resources: ["Official Python Tutorial", "Codecademy/DataCamp", "Libraries: NumPy, Pandas, Matplotlib, Seaborn documentation"] },
+                    { id: "ml_intro", name: "Introduction to Machine Learning", description: "Core concepts: Supervised, Unsupervised Learning, Model Evaluation.", resources: ["Coursera (Andrew Ng's ML Specialization)", "Google's ML Crash Course", "Book: 'Hands-On Machine Learning' (Géron)"] },
+                    { id: "dl_intro", name: "Introduction to Deep Learning", description: "Neural Networks, Backpropagation, Activation Functions, Optimization.", resources: ["fast.ai Course", "DeepLearning.AI Specializations (Coursera)", "Book: 'Deep Learning' (Goodfellow, Bengio, Courville)"] },
+                    { id: "dl_frameworks", name: "Deep Learning Frameworks", description: "Learn TensorFlow/Keras or PyTorch.", resources: ["Official TensorFlow Tutorials", "Official PyTorch Tutorials", "Udemy courses"] }
+                ]
+            },
+            {
+                title: "Phase 2: Core Generative AI & NLP (Intermediate)",
+                topics: [
+                    { id: "nlp_fund", name: "NLP Fundamentals", description: "Text processing, tokenization, embeddings.", resources: ["Stanford CS224n Course", "NLTK/spaCy documentation", "Papers: Word2Vec, GloVe, FastText"] },
+                    { id: "seq_models", name: "Sequence Models", description: "RNNs, LSTMs, GRUs for sequential data.", resources: ["DeepLearning.AI Sequence Models Course", "Colah's Blog (Understanding LSTM Networks)"] },
+                    { id: "attention", name: "Attention Mechanism", description: "Understanding how models focus on relevant parts of input.", resources: ["Paper: 'Attention Is All You Need'", "Jay Alammar's Blog (The Illustrated Transformer)"] },
+                    { id: "transformers", name: "Transformers", description: "Architecture, Self-Attention, Positional Encoding.", resources: ["Hugging Face Transformers Course", "Paper: 'Attention Is All You Need'", "Jay Alammar's Blog"] },
+                    { id: "pretrained", name: "Pre-trained Models", description: "Using models like BERT, GPT variants.", resources: ["Hugging Face Hub & Documentation", "Papers: BERT, GPT-2, GPT-3"] },
+                    { id: "gen_models_intro", name: "Introduction to Generative Models", description: "Variational Autoencoders (VAEs) and Generative Adversarial Networks (GANs).", resources: ["DeepLearning.AI GANs Specialization", "Tutorials on VAEs/GANs in TF/PyTorch", "Papers: VAE, GAN"] }
+                ]
+            },
+            {
+                title: "Phase 3: Large Language Models (Advanced)",
+                topics: [
+                    { id: "llm_arch", name: "LLM Architectures", description: "Deep dive into architectures like GPT-3/4, PaLM, Llama.", resources: ["Research Papers for specific models", "Blog posts analyzing architectures (e.g., SemiAnalysis)"] },
+                    { id: "llm_train_tune", name: "Training & Fine-tuning LLMs", description: "Techniques, datasets, compute considerations, parameter-efficient fine-tuning (PEFT).", resources: ["Hugging Face Documentation (Fine-tuning)", "Papers on PEFT (LoRA, QLoRA)", "Cloud AI Platform Docs (Vertex AI, SageMaker)"] },
+                    { id: "prompt_eng", name: "Prompt Engineering & In-Context Learning", description: "Designing effective prompts to guide LLMs.", resources: ["Prompt Engineering Guide (promptingguide.ai)", "OpenAI/Anthropic Documentation", "Community forums"] },
+                    { id: "llm_eval", name: "LLM Evaluation", description: "Metrics (BLEU, ROUGE, Perplexity) and Benchmarks (HELM, GLUE).", resources: ["Papers on evaluation metrics", "Benchmark websites (e.g., HELM)", "Hugging Face Evaluate library"] },
+                    { id: "multimodal", name: "Multimodal Models", description: "Models combining text with images, audio, etc. (e.g., CLIP, Flamingo).", resources: ["Research papers (CLIP, DALL-E 2, Flamingo)", "OpenAI Cookbook"] },
+                    { id: "responsible_ai", name: "Responsible AI & Ethics", description: "Bias detection/mitigation, safety, alignment, fairness.", resources: ["Google AI Responsible AI Practices", "Partnership on AI Resources", "Ethics guidelines from AI conferences (NeurIPS, ICML)"] },
+                    { id: "llm_deploy", name: "LLM Deployment & MLOps", description: "Serving models, monitoring, scaling, optimization.", resources: ["MLOps Coursera Specialization", "Tools: Docker, Kubernetes, MLflow, BentoML, vLLM", "Cloud provider documentation"] }
+                ]
+            },
+             {
+                title: "Phase 4: Specializations & Frontiers (Professional)",
+                topics: [
+                    { id: "adv_arch", name: "Advanced Architectures", description: "Mixture of Experts (MoE), Retrieval Augmented Generation (RAG).", resources: ["Papers on MoE (e.g., GShard, Switch Transformers)", "Papers/Blogs on RAG", "Frameworks like LangChain, LlamaIndex"] },
+                    { id: "rlhf", name: "Reinforcement Learning from Human Feedback (RLHF)", description: "Aligning LLMs with human preferences.", resources: ["Papers: InstructGPT, Constitutional AI", "Hugging Face TRL library", "DeepMind/OpenAI/Anthropic blogs"] },
+                    { id: "efficient_llm", name: "Efficient LLMs", description: "Quantization, Pruning, Knowledge Distillation.", resources: ["Papers on model compression techniques", "Libraries: bitsandbytes, GPTQ", "NVIDIA TensorRT documentation"] },
+                    { id: "llm_apps", name: "LLM Applications", description: "Explore diverse uses: Chatbots, Code Generation, Content Creation, Scientific Discovery.", resources: ["Case studies", "Developer blogs from companies using LLMs", "Kaggle competitions"] },
+                    { id: "research_trends", name: "Research Trends", description: "Stay updated with the latest papers and advancements.", resources: ["arXiv (cs.CL, cs.AI)", "AI Conference Proceedings (NeurIPS, ICML, ACL, EMNLP)", "AI research blogs", "Twitter (following key researchers)"] }
+                ]
+            },
+            {
+                title: "Phase 5: Professional Projects",
+                 topics: [
+                    { id: "proj1", name: "Project 1: Domain-Specific LLM Fine-tuning", description: "Fine-tune a pre-trained LLM (e.g., Llama 3, Mistral) on a specialized dataset (e.g., legal texts, medical papers, financial reports) for tasks like summarization, Q&A, or classification. Focus on data preparation, PEFT techniques, and rigorous evaluation.", resources: ["Hugging Face Datasets & Models", "PEFT Libraries (LoRA, QLoRA)", "Domain-specific corpora (PubMed, SEC filings, etc.)", "Evaluation metrics relevant to the task"] },
+                    { id: "proj2", name: "Project 2: Advanced RAG System", description: "Build a Retrieval Augmented Generation system that queries a large private or specialized knowledge base (e.g., company documentation, research paper archive). Implement advanced retrieval techniques (vector search with metadata filtering, re-ranking), integrate with an LLM for answer synthesis, and build a user interface.", resources: ["Vector Databases (Pinecone, Weaviate, Chroma)", "Embedding Models (Sentence Transformers, OpenAI Ada)", "Frameworks (LangChain, LlamaIndex)", "UI Framework (Streamlit, Gradio, React)"] },
+                    { id: "proj3", name: "Project 3: Multimodal Generative Application", description: "Develop an application that bridges modalities. Examples: Generate detailed image captions that adapt to a specific style (e.g., poetic, technical); create music based on textual descriptions; generate storyboards (sequences of images) from a script. Requires integrating models like CLIP, Stable Diffusion, or MusicGen.", resources: ["Multimodal model APIs/libraries (OpenAI, Hugging Face Diffusers)", "Image/Audio processing libraries", "Frameworks for building interactive apps"] }
+                ]
+            }
+        ];
+
+        // --- DOM Elements ---
+        const container = document.getElementById('roadmap-container');
+        const sectionTemplate = document.getElementById('section-template');
+        const topicTemplate = document.getElementById('topic-template');
+
+        // --- Local Storage Keys ---
+        const PROGRESS_KEY = 'genaiRoadmapProgress';
+        const NOTES_KEY = 'genaiRoadmapNotes';
+        const SECTION_STATE_KEY = 'genaiRoadmapSectionState';
+
+        // --- Load Data ---
+        let progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '{}');
+        let notes = JSON.parse(localStorage.getItem(NOTES_KEY) || '{}');
+        let sectionState = JSON.parse(localStorage.getItem(SECTION_STATE_KEY) || '{}');
+
+        // --- Functions ---
+        function saveProgress() {
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+        }
+
+        function saveNotes() {
+            localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+        }
+
+        function saveSectionState() {
+             localStorage.setItem(SECTION_STATE_KEY, JSON.stringify(sectionState));
+        }
+
+        function renderRoadmap() {
+            container.innerHTML = ''; // Clear existing content
+
+            roadmapData.forEach((sectionData, sectionIndex) => {
+                const sectionEl = sectionTemplate.content.cloneNode(true).querySelector('section');
+                const sectionTitleEl = sectionEl.querySelector('.section-title');
+                const sectionTitleTextEl = sectionEl.querySelector('.section-title-text');
+                const sectionContentEl = sectionEl.querySelector('.section-content');
+
+                const sectionId = `section-${sectionIndex}`;
+                sectionEl.id = sectionId;
+                sectionTitleTextEl.textContent = sectionData.title;
+
+                // Toggle section visibility
+                const isOpen = sectionState[sectionId] !== false; // Default to open
+                if (isOpen) {
+                    sectionContentEl.classList.add('open');
+                    sectionTitleEl.classList.add('open');
+                }
+
+                sectionTitleEl.addEventListener('click', () => {
+                    const currentlyOpen = sectionContentEl.classList.toggle('open');
+                    sectionTitleEl.classList.toggle('open', currentlyOpen);
+                    sectionState[sectionId] = currentlyOpen;
+                    saveSectionState();
+                });
+
+
+                sectionData.topics.forEach(topicData => {
+                    const topicEl = topicTemplate.content.cloneNode(true).querySelector('.topic-item');
+                    const checkbox = topicEl.querySelector('input[type="checkbox"]');
+                    const label = topicEl.querySelector('label');
+                    const description = topicEl.querySelector('.description');
+                    const resourcesList = topicEl.querySelector('.resources ul');
+                    const notesBtn = topicEl.querySelector('.toggle-notes-btn');
+                    const notesArea = topicEl.querySelector('.notes-area');
+                    const textarea = topicEl.querySelector('textarea');
+                    const completionStatus = topicEl.querySelector('.completion-status');
+
+                    const topicId = topicData.id;
+                    checkbox.dataset.topicId = topicId;
+                    label.textContent = topicData.name;
+                    label.setAttribute('for', `check-${topicId}`); // Associate label with checkbox
+                    checkbox.id = `check-${topicId}`;
+                    description.textContent = topicData.description;
+
+                    // Populate resources
+                    topicData.resources.forEach(res => {
+                        const li = document.createElement('li');
+                        // Basic URL detection (improve if needed)
+                        if (res.toLowerCase().includes('http') || res.toLowerCase().includes('.ai') || res.toLowerCase().includes('.com') || res.toLowerCase().includes('.org')) {
+                             // Crude way to find potential links - assumes format like "Name (URL)" or just URL
+                            const match = res.match(/(.*?)\s?\((.*?)\)/);
+                            if(match && match[2].startsWith('http')) {
+                                li.innerHTML = `${match[1]} (<a href="${match[2]}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 underline">${match[2]}</a>)`;
+                            } else if (res.startsWith('http')) {
+                                 li.innerHTML = `<a href="${res}" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 underline">${res}</a>`;
+                            }
+                             else {
+                                li.textContent = res; // Fallback if no clear URL
+                            }
+                        } else {
+                            li.textContent = res;
+                        }
+                        resourcesList.appendChild(li);
+                    });
+
+                    // Set initial checkbox state and style
+                    if (progress[topicId]) {
+                        checkbox.checked = true;
+                        topicEl.classList.add('completed');
+                        completionStatus.classList.remove('hidden');
+                    }
+
+                    // Set initial notes
+                    textarea.value = notes[topicId] || '';
+
+                    // Event Listeners
+                    checkbox.addEventListener('change', (e) => {
+                        progress[topicId] = e.target.checked;
+                        topicEl.classList.toggle('completed', e.target.checked);
+                        completionStatus.classList.toggle('hidden', !e.target.checked);
+                        saveProgress();
+                    });
+
+                    notesBtn.addEventListener('click', () => {
+                        notesArea.classList.toggle('active');
+                        if (notesArea.classList.contains('active')) {
+                            textarea.focus();
+                        }
+                    });
+
+                    textarea.addEventListener('input', (e) => {
+                        notes[topicId] = e.target.value;
+                        // Debounce saving notes to avoid excessive writes
+                        debounce(saveNotes, 500)();
+                    });
+
+                    sectionContentEl.appendChild(topicEl);
+                });
+
+                container.appendChild(sectionEl);
+            });
+        }
+
+        // Debounce utility
+        let debounceTimer;
+        function debounce(func, delay) {
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        // --- Initial Render ---
+        renderRoadmap();
+
+    </script>
+
+</body>
+
+</html>
