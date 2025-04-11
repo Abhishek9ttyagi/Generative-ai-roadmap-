@@ -7,7 +7,7 @@
     <title>Generative AI & LLM Learning Roadmap</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @font-face {
+/*         @font-face {
             font-family: 'LucideIcons';
             src: url(https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.ttf) format('truetype');
         }
@@ -50,13 +50,28 @@
         }
          /* Style toggle icon */
         .toggle-icon::before {
-            content: '⌄'; /* Lucide chevron-down */
+            content: '🔺'; /* Lucide chevron-down */
             display: inline-block;
             transition: transform 0.3s ease;
         }
         .section-title.open .toggle-icon::before {
             transform: rotate(180deg); /* Rotate icon when open */
+        } */
+         @font-face {
+            font-family: 'LucideIcons';
+            src: url(https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.ttf) format('truetype');
         }
+        .lucide-font { font-family: 'LucideIcons'; font-size: 1.25rem; line-height: 1; display: inline-block; font-style: normal; font-weight: normal; font-variant: normal; text-rendering: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .notes-area { display: none; transition: all 0.3s ease-in-out; }
+        .notes-area.active { display: block; }
+        .section-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
+        .section-content.open { max-height: 10000px; transition: max-height 0.5s ease-in; }
+        .completed label { text-decoration: line-through; opacity: 0.7; }
+        .toggle-icon::before { content: '🔺';
+         font-family: 'LucideIcons'; display: inline-block; transition: transform 0.3s ease; }
+        .section-title.open .toggle-icon::before { transform: rotate(180deg); }
+        .btn-icon { width: 0.875rem; height: 0.875rem; display: inline-block; vertical-align: middle; margin-right: 0.25rem; }
+        .btn-icon.filter-invert { filter: invert(1) brightness(1); }
     </style>
     <script>
         // Configuration for Tailwind CSS (optional)
