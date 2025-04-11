@@ -240,7 +240,7 @@
                 sectionTitleTextEl.textContent = sectionData.title;
 
                 // Toggle section visibility
-                const isOpen = sectionState[sectionId] !== true; // Default to open
+                const isOpen = sectionState[sectionId] === true; // Default to open
                 if (isOpen) {
                     sectionContentEl.classList.add('open');
                     sectionTitleEl.classList.add('open');
